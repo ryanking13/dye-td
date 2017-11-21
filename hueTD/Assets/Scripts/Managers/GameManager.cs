@@ -6,6 +6,14 @@ public class GameManager : MonoBehaviour {
 
     public static GameManager gm = null;
 
+    private int stageLevel;
+    private SCENES scene;
+
+    private int money;
+    private string[] essences;
+    private string[] currentEssences;
+
+
 	void Awake () {
 
         /*
@@ -19,8 +27,10 @@ public class GameManager : MonoBehaviour {
             Destroy(this.gameObject);
 	}
 	
-	// Update is called once per frame
 	void Update () {
 		
 	}
 }
+
+// types of scenes
+public enum SCENES { STAGE };
