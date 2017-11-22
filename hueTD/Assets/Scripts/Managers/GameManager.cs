@@ -6,6 +6,11 @@ public class GameManager : MonoBehaviour {
 
     public static GameManager gm = null;
 
+    /*
+     * Managers
+     */
+    private BoardManager boardManager;
+
     private int stageLevel;
     private SCENES scene;
 
@@ -13,6 +18,7 @@ public class GameManager : MonoBehaviour {
     private string[] essences;
     private string[] currentEssences;
 
+    public List<GameObject> enemies;
 
 	void Awake () {
 
@@ -25,11 +31,41 @@ public class GameManager : MonoBehaviour {
             gm = this;
         else
             Destroy(this.gameObject);
+
+        /*
+         * Initialize Managers
+         */
+        boardManager = GetComponent<BoardManager>();
+        boardManager.BoardSetup(scene);
+
+
+        /*
+         * Initialize Objects;
+         */
+        // enemies = new List<GameObject>();
 	}
 	
 	void Update () {
 		
 	}
+
+
+
+#region Getter/Setter
+
+    public BoardManager GetBoardManager() {
+        return boardManager;
+    }
+
+    public List<GameObject> GetEnemies() {
+        return enemies;
+    }
+
+    public void removeEnemy(GameObject e) {
+        enemies.Remove(e);
+    }
+
+    #endregion
 }
 
 // types of scenes

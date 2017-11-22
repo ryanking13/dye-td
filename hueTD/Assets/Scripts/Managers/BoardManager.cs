@@ -5,6 +5,7 @@ using UnityEngine;
 public class BoardManager : MonoBehaviour {
 
     private GameManager gm;
+    private Waypoints waypoints;
 
 	void Start () {
         gm = GameManager.gm;
@@ -22,6 +23,10 @@ public class BoardManager : MonoBehaviour {
     }
 
     private void StageSetup() {
-        
+        waypoints = GameObject.Find("Waypoints").GetComponent<Waypoints>();
+    }
+
+    public Transform[] GetWaypoints() {
+        return waypoints.GetWaypoints();
     }
 }
