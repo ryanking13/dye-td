@@ -37,6 +37,8 @@ public class Tower : MonoBehaviour {
         initialize();
 	}
 
+    # region Getter/Setter
+
     public void initialize() {
         currentDamage = originalDamage;
         currentRange = originalRange;
@@ -44,33 +46,47 @@ public class Tower : MonoBehaviour {
 
         shotInterval = 1 / currentShotSpeed;
         currentTime = Time.time;
-        updateEnemies();
+        UpdateEnemies();
     }
 
-    public void updateDamage(int d) {
+    public int GetDamage() {
+        return currentDamage;
+    }
+
+    public void UpdateDamage(int d) {
         currentDamage += d;
         currentDamage = Mathf.Max(1, currentDamage); // damage must be positive
     }
 
-    public void updateRange(int d) {
+    public int GetRange() {
+        return currentRange;
+    }
+
+    public void UpdateRange(int d) {
         currentRange += d;
         currentRange = Mathf.Max(1, currentRange); // range must be positive
     }
 
-    public void updateShotSpeed(float d) {
+    public float GetShotSpeed() {
+        return currentShotSpeed;
+    }
+
+    public void UpdateShotSpeed(float d) {
         currentShotSpeed += d;
         currentShotSpeed = Mathf.Max((float)0.1, currentShotSpeed); // shot speed must be positive
 
         shotInterval = 1 / currentShotSpeed;
     }
 
-    public void updateEnemies() {
+    # endregion
+
+    public void UpdateEnemies() {
         enemies = gm.GetEnemies();
     }
 
     void Update () {
 
-        updateEnemies();
+        UpdateEnemies();
 
         // not ready to shot
         if (Time.time - currentTime < shotInterval) {
@@ -81,11 +97,10 @@ public class Tower : MonoBehaviour {
         GameObject closestEnemy = null;
         foreach(GameObject e in enemies) {
 
-            if (!e.GetComponent<Enemy>().isHittable()) // if enemy is not hittable state
+            if (!e.GetComponent<Enemy>().IsHittable()) // if enemy is not hittable state
                 continue;
 
             float d = Vector3.Distance(transform.position, e.transform.position);
-            Debug.Log(d);
             if (d <= currentRange && d < closestDistance) {
                 closestDistance = d;
                 closestEnemy = e;

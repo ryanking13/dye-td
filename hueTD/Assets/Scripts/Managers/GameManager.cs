@@ -5,18 +5,19 @@ using UnityEngine;
 public class GameManager : MonoBehaviour {
 
     public static GameManager gm = null;
+    private SCENES scene;
 
     /*
      * Managers
      */
     private BoardManager boardManager;
 
+    
     private int stageLevel;
-    private SCENES scene;
-
-    private int money;
-    private string[] essences;
-    private string[] currentEssences;
+    private int life = 100; // if life becomes 0, stage fails
+    private int money = 0;
+    private List<string> essences;
+    private List<string> currentEssences;
 
     public List<GameObject> enemies;
 
@@ -38,12 +39,21 @@ public class GameManager : MonoBehaviour {
         boardManager = GetComponent<BoardManager>();
         boardManager.BoardSetup(scene);
 
+        /*
+         * Initialize Databases
+         */
+        EnemyDatabase.init();
+        EnemyGenerationDatabase.init();
 
         /*
          * Initialize Objects;
          */
         // enemies = new List<GameObject>();
 	}
+
+    public void StartLevel() {
+        
+    }
 	
 	void Update () {
 		
@@ -51,8 +61,8 @@ public class GameManager : MonoBehaviour {
 
 
 
-#region Getter/Setter
-
+#region Getter/Setter/Updater
+    
     public BoardManager GetBoardManager() {
         return boardManager;
     }
@@ -61,8 +71,24 @@ public class GameManager : MonoBehaviour {
         return enemies;
     }
 
-    public void removeEnemy(GameObject e) {
+    public void RemoveEnemy(GameObject e) {
         enemies.Remove(e);
+    }
+
+    public int GetMoney() {
+        return money;
+    }
+
+    public void UpdateMoney(int d) {
+        money += d;
+    }
+
+    public int GetLife() {
+        return life;
+    }
+
+    public void UpdateLife(int d) {
+        life += d;
     }
 
     #endregion

@@ -29,7 +29,7 @@ public class Missile : MonoBehaviour {
 
         // if arrived the point
         if (Vector3.Distance(target.transform.position, transform.position) < 0.2f) {
-            // DoSomeFunction();
+            target.GetComponent<Enemy>().hit(tower.GetDamage());
             Destroy(gameObject);
         }
     }

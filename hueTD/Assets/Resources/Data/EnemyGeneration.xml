@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<enemygeneration>
+
+    <enemyset>
+        <stage>1</stage>
+        <level>1</level>
+
+        <enemy>
+            <id>1</id>
+            <number>2</number>
+            <time>0,1</time>
+        </enemy>
+        
+        <enemy>
+            <id>2</id>
+            <number>1</number>
+            <time>3</time>
+        </enemy>
+    </enemyset>
+
+</enemygeneration>

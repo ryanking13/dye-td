@@ -10,11 +10,12 @@ public class Enemy : MonoBehaviour {
     private GameManager gm;
     private BoardManager bm;
 
-    public int originalHP;
-    public int originalDefense;
-    public float originalSpeed;
-    public int money; // money that enemy drops
-    public bool hittable; // if false, towers cannot attack this
+    public int originalHP = 10;
+    public int originalDefense = 0;
+    public float originalSpeed = 3;
+    public int money = 0; // money that enemy drops
+    public bool hittable = true; // if false, towers cannot attack this
+    // public enemyEffect effect;
 
     private int currentHP;
     private int currentDefense;
@@ -53,53 +54,77 @@ public class Enemy : MonoBehaviour {
 
         // arrived the end
         if(waypointIndex >= waypoints.Length) {
-            // doSomeArriveFunction()
-            destroySelf();
+            arrive();
             return;
         }
 
         nextPoint = waypoints[waypointIndex];
     }
 
-    private void destroySelf() {
-        gm.removeEnemy(gameObject);
+    // enemy arrive the goal
+    private void arrive() {
+        gm.UpdateLife(-1); // update life count
+        DestroySelf();
+    }
+
+    // enemy dead
+    private void die() {
+        gm.UpdateMoney(money);  // earn money
+        DestroySelf();          // destroy gameObject
+    }
+
+    // destroy gameObject
+    private void DestroySelf() {
+        gm.RemoveEnemy(gameObject);
         Destroy(gameObject);
     }
 
-    public int getHP() {
+    // is enemy in hittable state
+    public bool IsHittable() {
+        return hittable;
+    }
+    
+    // enemy is hit
+    public void hit(int dmg) {
+        int realDmg = Mathf.Max(1, dmg - GetDefense());
+        UpdateHP(-realDmg);
+    }
+
+    #region Getter/Setter
+
+    public int GetHP() {
         return currentHP;
     }
 
-    public int getDefense() {
+    public int GetDefense() {
         return currentDefense;
     }
 
-    public float getSpeed() {
+    public float GetSpeed() {
         return currentSpeed;
     }
 
-    public bool isHittable() {
-        return hittable;
-    }
 
-    public void updateHP(int d) {
+    public void UpdateHP(int d) {
         currentHP += d;
 
+        // if dead
         if(currentHP <= 0) {
-            // doSomeKillFunction()
-            destroySelf();
+            die();
         }
 
         currentHP = Mathf.Min(originalHP, currentHP); // currentHP can't be higher than original HP
     }
 
-    public void updateDefense(int d) {
+    public void UpdateDefense(int d) {
         currentDefense += d;
         currentDefense = Mathf.Max(0, currentDefense); // defense can't be negative
     }
 
-    public void updateSpeed(float d) {
+    public void UpdateSpeed(float d) {
         currentSpeed += d;
         currentSpeed = Mathf.Max(0, currentSpeed); // speed can't be negative
     }
+
+    #endregion
 }
