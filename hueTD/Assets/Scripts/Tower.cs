@@ -12,22 +12,109 @@ public class Tower : MonoBehaviour {
     public int towerLevel;
     public string towerName;
     public string essence;      // color
+    public GameObject missile;
 
-    public int damage;
-    public int range;
-    public int size;
-    public int price;
-    public float shotSpeed;
-    // private towerEffect effect;
+    public int size;        // size of the tower (1 = 1x1, 2 = 2x2, ... )
+    public int price;       // price of the tower ( when buying )
 
+    public int originalDamage;
+    public int originalRange;
+    public float originalShotSpeed;
+
+    private int currentDamage;
+    private int currentRange;
+    private float currentShotSpeed;
     private float shotInterval;
 
-	void Start () {
+    // private towerEffect effect;
+
+    private List<GameObject> enemies;
+
+    private float currentTime;
+
+    void Start () {
         gm = GameManager.gm;
-        shotInterval = 1 / shotSpeed;
+        initialize();
 	}
 
+    # region Getter/Setter
+
+    public void initialize() {
+        currentDamage = originalDamage;
+        currentRange = originalRange;
+        currentShotSpeed = originalShotSpeed;
+
+        shotInterval = 1 / currentShotSpeed;
+        currentTime = Time.time;
+        UpdateEnemies();
+    }
+
+    public int GetDamage() {
+        return currentDamage;
+    }
+
+    public void UpdateDamage(int d) {
+        currentDamage += d;
+        currentDamage = Mathf.Max(1, currentDamage); // damage must be positive
+    }
+
+    public int GetRange() {
+        return currentRange;
+    }
+
+    public void UpdateRange(int d) {
+        currentRange += d;
+        currentRange = Mathf.Max(1, currentRange); // range must be positive
+    }
+
+    public float GetShotSpeed() {
+        return currentShotSpeed;
+    }
+
+    public void UpdateShotSpeed(float d) {
+        currentShotSpeed += d;
+        currentShotSpeed = Mathf.Max((float)0.1, currentShotSpeed); // shot speed must be positive
+
+        shotInterval = 1 / currentShotSpeed;
+    }
+
+    # endregion
+
+    public void UpdateEnemies() {
+        enemies = gm.GetEnemies();
+    }
+
     void Update () {
-		
+
+        UpdateEnemies();
+
+        // not ready to shot
+        if (Time.time - currentTime < shotInterval) {
+            return;
+        }
+
+        float closestDistance = 9999999;
+        GameObject closestEnemy = null;
+        foreach(GameObject e in enemies) {
+
+            if (!e.GetComponent<Enemy>().IsHittable()) // if enemy is not hittable state
+                continue;
+
+            float d = Vector3.Distance(transform.position, e.transform.position);
+            if (d <= currentRange && d < closestDistance) {
+                closestDistance = d;
+                closestEnemy = e;
+            }
+        }
+
+        // no enemy is in range
+        if(closestEnemy == null)
+            return;
+
+        // if target enemy is specified, generate missile, set entities
+        GameObject m = Instantiate(missile, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
+        m.transform.SetParent(transform, false);
+        m.GetComponent<Missile>().SetEntity(this, closestEnemy);
+        currentTime = Time.time;
 	}
 }

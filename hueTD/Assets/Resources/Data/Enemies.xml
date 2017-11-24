@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<enemies>
+    <enemy>
+        <id>1</id>
+        <name>Black</name>
+        <HP>10</HP>
+        <defense>0</defense>
+        <speed>1.0</speed>
+        <money>1</money>
+        <effect>effect_name</effect>
+    </enemy>
+    
+    <enemy>
+        <id>2</id>
+        <name>Red</name>
+        <HP>20</HP>
+        <defense>1</defense>
+        <speed>2.0</speed>
+        <money>10</money>
+        <effect>effect_name</effect>
+    </enemy>
+</enemies>
