@@ -31,7 +31,7 @@ public class EnemyDatabase {
         }
     }
 
-    public EnemyInfo GetEnemyById(int id) {
+    public static EnemyInfo GetEnemyById(int id) {
         // current lenear search
         // if database grows, please change this to binary search
         for(int i = 0; i < enemyList.Count; i++) {

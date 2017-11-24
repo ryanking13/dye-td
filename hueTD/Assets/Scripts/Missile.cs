@@ -9,7 +9,7 @@ public class Missile : MonoBehaviour {
 
     private GameManager gm;
 
-    private float speed = 5;
+    private float speed = 10;
     private Tower tower;
     private GameObject target;
 

@@ -7,14 +7,14 @@ public class EnemyGenerationDatabase {
 
     private static XmlDocument doc;
     private static string DB = "Data/EnemyGeneration";
- 
+
     public static void init() {
         TextAsset xml = (TextAsset)Resources.Load(DB);
-        XmlDocument doc = new XmlDocument();
+        doc = new XmlDocument();
         doc.LoadXml(xml.text);
     }
 
-    public List<EnemyGeneration> GetEnemyGenerationList(int stage, int level) {
+    public static List<EnemyGeneration> GetEnemyGenerationList(int stage, int level) {
         List<EnemyGeneration> gen = new List<EnemyGeneration>();
 
         XmlNodeList enemySets = doc.GetElementsByTagName("enemyset");

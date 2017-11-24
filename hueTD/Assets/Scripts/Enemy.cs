@@ -10,11 +10,11 @@ public class Enemy : MonoBehaviour {
     private GameManager gm;
     private BoardManager bm;
 
-    public int originalHP = 10;
-    public int originalDefense = 0;
-    public float originalSpeed = 3;
-    public int money = 0; // money that enemy drops
-    public bool hittable = true; // if false, towers cannot attack this
+    private int originalHP = 10;
+    private int originalDefense = 0;
+    private float originalSpeed = 3;
+    private int money = 0; // money that enemy drops
+    private bool hittable = true; // if false, towers cannot attack this
     // public enemyEffect effect;
 
     private int currentHP;
@@ -26,19 +26,15 @@ public class Enemy : MonoBehaviour {
     private Transform nextPoint;    // point that enemy will currently move to
 
 	void Start () {
-        gm = GameManager.gm;
-        bm = gm.GetBoardManager();
 
-        currentHP = originalHP;
-        currentDefense = originalDefense;
-        currentSpeed = originalSpeed;
-
-        waypoints = bm.GetWaypoints();
-        waypointIndex = 0;
-        nextPoint = waypoints[waypointIndex];
 	}
 	
 	void Update () {
+
+        // if point is not set
+        if (nextPoint == null)
+            return;
+
         Vector3 direction = (nextPoint.position - transform.position).normalized;
         transform.Translate(direction * currentSpeed * Time.deltaTime);
 
@@ -47,6 +43,26 @@ public class Enemy : MonoBehaviour {
             UpdateWaypoint();
         }
 	}
+
+    public void init(EnemyInfo info) {
+
+        gm = GameManager.gm;
+        bm = gm.GetBoardManager();
+
+        originalHP = info.HP;
+        originalDefense = info.defense;
+        originalSpeed = info.speed;
+        money = info.money;
+        // TODO: effect = iinfo.effect
+
+        currentHP = originalHP;
+        currentDefense = originalDefense;
+        currentSpeed = originalSpeed;
+        
+        waypoints = bm.GetWaypoints();
+        waypointIndex = 0;
+        nextPoint = waypoints[waypointIndex];
+    }
 
     // update the waypoint
     private void UpdateWaypoint() {

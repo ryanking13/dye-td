@@ -5,10 +5,16 @@ using UnityEngine;
 public class BoardManager : MonoBehaviour {
 
     private GameManager gm;
+
+    public GameObject[] stages;
+
+    private GameObject currentStage;
     private Waypoints waypoints;
 
-	void Start () {
+	public void init() {
         gm = GameManager.gm;
+        currentStage = null;
+        waypoints = null;
 	}
 
     public void BoardSetup(SCENES scene) {
@@ -23,7 +29,15 @@ public class BoardManager : MonoBehaviour {
     }
 
     private void StageSetup() {
-        waypoints = GameObject.Find("Waypoints").GetComponent<Waypoints>();
+
+        if (currentStage != null) {
+            Destroy(currentStage);
+        }
+
+        int stage = gm.GetStage();
+
+        currentStage = Instantiate(stages[stage]) as GameObject;
+        waypoints = currentStage.transform.Find("Waypoints").GetComponent<Waypoints>();
     }
 
     public Transform[] GetWaypoints() {
