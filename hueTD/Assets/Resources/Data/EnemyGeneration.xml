@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- timescale of time is deci-second, which is 10==1sec -->
+<enemygeneration>
+
+    <enemyset>
+        <stage>0</stage>
+        <level>1</level>
+
+        <enemy>
+            <id>1</id>
+            <number>2</number>
+            <time>0,10</time>
+        </enemy>
+        
+        <enemy>
+            <id>2</id>
+            <number>1</number>
+            <time>30</time>
+        </enemy>
+    </enemyset>
+
+</enemygeneration>
