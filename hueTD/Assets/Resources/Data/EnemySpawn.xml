@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- timescale of time is deci-second, which is 10==1sec -->
+<!-- type: each(each generation time), interval(start, end) -->
+<enemygeneration>
+
+    <enemyset>
+        <map>0</map>
+        <wave>1</wave>
+
+        <enemy>
+            <id>1</id>
+            <lane>0</lane>
+            <type>each</type>
+            <number>2</number>
+            <time>0,10</time>
+        </enemy>
+      
+        <enemy>
+            <id>1</id>
+            <lane>1</lane>
+            <type>interval</type>
+            <number>5</number>
+            <time>0,100</time>
+        </enemy>
+      
+        <enemy>
+            <id>2</id>
+            <lane>0</lane>
+            <type>each</type>
+            <number>1</number>
+            <time>30</time>
+        </enemy>
+    </enemyset>
+
+</enemygeneration>

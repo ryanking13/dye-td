@@ -16,9 +16,9 @@ public class GameManager : MonoBehaviour {
     /*
      * Stage related variables
      */
-    private int stage;
-    private int stageLevel;
-    private float levelTime;
+    private int map;
+    private int wave;
+    private float waveTime;
 
     /*
      * Gameplay related variables
@@ -31,7 +31,8 @@ public class GameManager : MonoBehaviour {
     /*
      * Enemy related variables
      */
-    private List<EnemyInfo>[] enemyGenerationList;
+    private List<Pair<EnemyInfo, int>>[] enemyGenerationList;
+
     private int enemyGenerationListIndex; // index pointer for enemyGenerationList ( indecating lastly generated enemy )
     private List<GameObject> enemies;
     private int totalEnemyNumber;
@@ -60,36 +61,36 @@ public class GameManager : MonoBehaviour {
          * Initialize Databases
          */
         EnemyDatabase.init();
-        EnemyGenerationDatabase.init();
+        EnemySpawnDatabase.init();
 
         /*
          * Initialize Objects;
          */
 
-        enemyGenerationList = new List<EnemyInfo>[CONFIG.MAX_LEVEL_SECOND * CONFIG.ENEMY_GENERATION_TIMESCALE];
-        for(int i = 0; i < CONFIG.MAX_LEVEL_SECOND * CONFIG.ENEMY_GENERATION_TIMESCALE; i++)
-            enemyGenerationList[i] = new List<EnemyInfo>();
+        enemyGenerationList = new List<Pair<EnemyInfo, int>>[CONFIG.MAX_WAVE_SECOND * CONFIG.ENEMY_GENERATION_TIMESCALE];
+        for(int i = 0; i < CONFIG.MAX_WAVE_SECOND * CONFIG.ENEMY_GENERATION_TIMESCALE; i++)
+            enemyGenerationList[i] = new List<Pair<EnemyInfo, int>>();
 
         enemies = new List<GameObject>();
 
-        scene = SCENES.STAGE;
+        scene = SCENES.MAP;
         state = GAMESTATE.PAUSED;
 
-        SetStage(0);
-        SetStageLevel(1);
+        SetMap(0);
+        SetCurrentWave(1);
         boardManager.BoardSetup(scene);
-        StartNewLevel();
+        StartNewWave();
 	}
 
-    // start new level of the stage
-    public void StartNewLevel() {
+    // start new wave of the map
+    public void StartNewWave() {
 
         /*
-         * set enemy list of this level
+         * set enemy list of this wave
          */
 
-        // get enemy list of this stage/level
-        List<EnemyGeneration> l = EnemyGenerationDatabase.GetEnemyGenerationList(stage, stageLevel);
+        // get enemy list of this map/wave
+        List<EnemySpawn> l = EnemySpawnDatabase.GetEnemySpawnList(map, wave);
 
         // clear previous list
         for(int i = 0; i < enemyGenerationList.Length; i++)
@@ -97,21 +98,21 @@ public class GameManager : MonoBehaviour {
 
         // update enemy list
         totalEnemyNumber = 0;
-        foreach (EnemyGeneration eg in l) {
+        foreach (EnemySpawn eg in l) {
             EnemyInfo e = EnemyDatabase.GetEnemyById(eg.id);
             totalEnemyNumber += eg.number;
 
             foreach(int t in eg.times) {
-                enemyGenerationList[t].Add(e);
+                enemyGenerationList[t].Add(new Pair<EnemyInfo, int>(e, eg.lane));
             }
         }
 
         // initialize index, enemies, time
         enemyGenerationListIndex = 0;
         enemies.Clear();
-        levelTime = 0.0f;
+        waveTime = 0.0f;
 
-        state = GAMESTATE.ONLEVEL;
+        state = GAMESTATE.ONWAVE;
     }
 	
 	void Update () {
@@ -119,10 +120,10 @@ public class GameManager : MonoBehaviour {
             case GAMESTATE.PAUSED:
                 // game paused
                 break;
-            case GAMESTATE.ONLEVEL:
-                RunLevel();
+            case GAMESTATE.ONWAVE:
+                RunWave();
                 break;
-            case GAMESTATE.INTERLEVEL:
+            case GAMESTATE.INTERWAVE:
                 // TODO: implement
                 break;
             default:
@@ -131,30 +132,30 @@ public class GameManager : MonoBehaviour {
         }
 	}
 
-    // when game is running, and is on level
-    private void RunLevel() {
+    // when game is running, and is on wave
+    private void RunWave() {
 
         if(totalEnemyNumber == 0) {
-            // end level
-            Debug.Log("level clear");
+            // end wave
+            Debug.Log("wave clear");
         }
 
-        levelTime += Time.deltaTime;
+        waveTime += Time.deltaTime;
 
-        int levelTimeInt = (int)(levelTime * CONFIG.ENEMY_GENERATION_TIMESCALE);
+        int levelTimeInt = (int)(waveTime * CONFIG.ENEMY_GENERATION_TIMESCALE);
 
         while(enemyGenerationListIndex < levelTimeInt) {
-            foreach(EnemyInfo info in enemyGenerationList[enemyGenerationListIndex]) {
-                GenerateEnemy(info);
+            foreach(Pair<EnemyInfo, int> info in enemyGenerationList[enemyGenerationListIndex]) {
+                GenerateEnemy(info.First, info.Second);
             }
             enemyGenerationListIndex++;
         }
     }
 
     // generate new enemy, add it to the enemies list
-    private void GenerateEnemy(EnemyInfo info) {
-        GameObject enemy = Instantiate(enemyPrefab, boardManager.GetWaypoints()[0].transform.position, Quaternion.identity) as GameObject;
-        enemy.GetComponent<Enemy>().init(info);
+    private void GenerateEnemy(EnemyInfo info, int lane) {
+        GameObject enemy = Instantiate(enemyPrefab, boardManager.GetWaypoints(lane)[0].transform.position, Quaternion.identity) as GameObject;
+        enemy.GetComponent<Enemy>().init(info, lane);
         enemies.Add(enemy);
     }
 
@@ -165,20 +166,20 @@ public class GameManager : MonoBehaviour {
         return boardManager;
     }
 
-    public int GetStage() {
-        return stage;
+    public int GetMap() {
+        return map;
     }
 
-    public void SetStage(int stageNumber) {
-        stage = stageNumber;
+    public void SetMap(int mapNumber) {
+        map = mapNumber;
     }
 
     public int GetStageLevel() {
-        return stageLevel;
+        return wave;
     }
 
-    public void SetStageLevel(int level) {
-        stageLevel = level;
+    public void SetCurrentWave(int newWave) {
+        wave = newWave;
     }
 
     public List<GameObject> GetEnemies() {
@@ -211,11 +212,11 @@ public class GameManager : MonoBehaviour {
 
 // some config ( const ) values that are game related 
 public static class CONFIG {
-    public static int MAX_LEVEL_SECOND = 120; // max second for one level
+    public static int MAX_WAVE_SECOND = 120; // max second for one level
     public static int ENEMY_GENERATION_TIMESCALE = 10;
 }
 
 // types of scenes
-public enum SCENES { STAGE };
+public enum SCENES { MAP };
 
-public enum GAMESTATE { PAUSED, ONLEVEL, INTERLEVEL };
+public enum GAMESTATE { PAUSED, ONWAVE, INTERWAVE };

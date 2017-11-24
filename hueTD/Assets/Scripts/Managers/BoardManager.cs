@@ -6,41 +6,52 @@ public class BoardManager : MonoBehaviour {
 
     private GameManager gm;
 
-    public GameObject[] stages;
+    public GameObject[] maps;
 
-    private GameObject currentStage;
-    private Waypoints waypoints;
+    private GameObject currentMap;
+    private List<Lane> lanes;
 
 	public void init() {
         gm = GameManager.gm;
-        currentStage = null;
-        waypoints = null;
+        currentMap = null;
+        lanes = null;
 	}
 
     public void BoardSetup(SCENES scene) {
 
         switch (scene) {
-            case SCENES.STAGE:
-                StageSetup();
+            case SCENES.MAP:
+                MapSetup();
                 break;
             default:
                 break;
         }
     }
 
-    private void StageSetup() {
+    private void MapSetup() {
 
-        if (currentStage != null) {
-            Destroy(currentStage);
+        if (currentMap != null) {
+            Destroy(currentMap);
         }
 
-        int stage = gm.GetStage();
+        int map = gm.GetMap();
+        Debug.Log(map);
+        currentMap = Instantiate(maps[map]) as GameObject;
 
-        currentStage = Instantiate(stages[stage]) as GameObject;
-        waypoints = currentStage.transform.Find("Waypoints").GetComponent<Waypoints>();
+        // add lanes
+        int laneIdx = 0;
+        lanes = new List<Lane>();
+        while(true){
+            Transform l = currentMap.transform.Find("Lane" + laneIdx.ToString());
+            if (l == null)
+                break;
+
+            lanes.Add(l.GetComponent<Lane>());
+            laneIdx++;
+        }
     }
 
-    public Transform[] GetWaypoints() {
-        return waypoints.GetWaypoints();
+    public Transform[] GetWaypoints(int idx) {
+        return lanes[idx].GetWaypoints();
     }
 }

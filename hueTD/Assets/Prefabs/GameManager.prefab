@@ -65,5 +65,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f24ee9e99e2d9e4ca6cd992cd23e377, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stages:
+  maps:
   - {fileID: 1592835248105508, guid: 1d41a164754fca144ac0d419bf2282f1, type: 2}

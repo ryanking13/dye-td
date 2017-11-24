@@ -21,6 +21,7 @@ public class Enemy : MonoBehaviour {
     private int currentDefense;
     private float currentSpeed;
 
+    private int lane;
     private Transform[] waypoints;  // points that defines enemy move path
     private int waypointIndex;
     private Transform nextPoint;    // point that enemy will currently move to
@@ -44,7 +45,7 @@ public class Enemy : MonoBehaviour {
         }
 	}
 
-    public void init(EnemyInfo info) {
+    public void init(EnemyInfo info, int lane) {
 
         gm = GameManager.gm;
         bm = gm.GetBoardManager();
@@ -53,13 +54,14 @@ public class Enemy : MonoBehaviour {
         originalDefense = info.defense;
         originalSpeed = info.speed;
         money = info.money;
+        this.lane = lane;
         // TODO: effect = iinfo.effect
 
         currentHP = originalHP;
         currentDefense = originalDefense;
         currentSpeed = originalSpeed;
         
-        waypoints = bm.GetWaypoints();
+        waypoints = bm.GetWaypoints(lane);
         waypointIndex = 0;
         nextPoint = waypoints[waypointIndex];
     }
@@ -70,7 +72,7 @@ public class Enemy : MonoBehaviour {
 
         // arrived the end
         if(waypointIndex >= waypoints.Length) {
-            arrive();
+            Arrive();
             return;
         }
 
@@ -78,13 +80,13 @@ public class Enemy : MonoBehaviour {
     }
 
     // enemy arrive the goal
-    private void arrive() {
+    private void Arrive() {
         gm.UpdateLife(-1); // update life count
         DestroySelf();
     }
 
     // enemy dead
-    private void die() {
+    private void Die() {
         gm.UpdateMoney(money);  // earn money
         DestroySelf();          // destroy gameObject
     }
@@ -126,7 +128,7 @@ public class Enemy : MonoBehaviour {
 
         // if dead
         if(currentHP <= 0) {
-            die();
+            Die();
         }
 
         currentHP = Mathf.Min(originalHP, currentHP); // currentHP can't be higher than original HP
