@@ -35,7 +35,6 @@ public class BoardManager : MonoBehaviour {
         }
 
         int map = gm.GetMap();
-        Debug.Log(map);
         currentMap = Instantiate(maps[map]) as GameObject;
 
         // add lanes

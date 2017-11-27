@@ -54,6 +54,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 1772485581479486, guid: 6b0517b4ec5d5a8408f4800e48a38ce8,
     type: 2}
+  towerPrefab: {fileID: 1387667790387234, guid: 91539f11d7f06ee448001c22bf591ede,
+    type: 2}
 --- !u!114 &114620337604297744
 MonoBehaviour:
   m_ObjectHideFlags: 1

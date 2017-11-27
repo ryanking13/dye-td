@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<towerlist>
+    
+    <tower>
+        <id>1</id>
+        <name>KingGodGeneralTower</name>
+        <level>1</level>
+        <size>1</size>
+        <price>1</price>
+        <damage>5</damage>
+        <range>5</range>
+        <shotspeed>5</shotspeed>
+        <towersprite>sample</towersprite>
+        <missilesprite>sample</missilesprite>
+    </tower>    
+
+</towerlist>

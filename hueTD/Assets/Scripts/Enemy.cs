@@ -61,7 +61,7 @@ public class Enemy : MonoBehaviour {
         currentDefense = originalDefense;
         currentSpeed = originalSpeed;
         
-        waypoints = bm.GetWaypoints(lane);
+        waypoints = bm.GetWaypoints(this.lane);
         waypointIndex = 0;
         nextPoint = waypoints[waypointIndex];
     }
