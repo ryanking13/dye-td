@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour {
      * Gameplay related variables
      */
     private int life = 100; // if life becomes 0, stage fails
-    private int money = 0;
+    private int money = 10000;
     private List<string> essences;
     private List<string> currentEssences;
 
@@ -170,6 +170,12 @@ public class GameManager : MonoBehaviour {
 
     public void HoldTower(int id) {
         towerInfo = TowerDatabase.GetTowerById(id);
+
+        if(towerInfo.price > GetMoney()) {
+            // TODO : can't buy
+            return;
+        }
+
         towerPrefab.GetComponent<Tower>().init(towerInfo);
         onGeneration = true;
     }
