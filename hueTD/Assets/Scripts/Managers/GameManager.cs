@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour {
      * Gameplay related variables
      */
     private int life = 100; // if life becomes 0, stage fails
-    private int money = 0;
+    private int money = 10000;
     private List<string> essences;
     private List<string> currentEssences;
 
@@ -38,6 +38,14 @@ public class GameManager : MonoBehaviour {
     private int totalEnemyNumber;
 
     public GameObject enemyPrefab;
+
+    /*
+     * Tower ralated variables
+     */
+
+    private bool onGeneration = false;
+    public GameObject towerPrefab;
+    public TowerInfo towerInfo;
 
 	void Awake () {
 
@@ -62,6 +70,7 @@ public class GameManager : MonoBehaviour {
          */
         EnemyDatabase.init();
         EnemySpawnDatabase.init();
+        TowerDatabase.init();
 
         /*
          * Initialize Objects;
@@ -159,9 +168,25 @@ public class GameManager : MonoBehaviour {
         enemies.Add(enemy);
     }
 
+    public void HoldTower(int id) {
+        towerInfo = TowerDatabase.GetTowerById(id);
 
-#region Getter/Setter/Updater
-    
+        if(towerInfo.price > GetMoney()) {
+            // TODO : can't buy
+            return;
+        }
+
+        towerPrefab.GetComponent<Tower>().init(towerInfo);
+        onGeneration = true;
+    }
+
+    public void FinishGeneration() {
+        UpdateMoney(GetTowerPrefab().GetComponent<Tower>().GetPrice());
+        onGeneration = false;
+    }
+
+    #region Getter/Setter/Updater
+
     public BoardManager GetBoardManager() {
         return boardManager;
     }
@@ -205,6 +230,18 @@ public class GameManager : MonoBehaviour {
 
     public void UpdateLife(int d) {
         life += d;
+    }
+
+    public bool IsGeneratingTower() {
+        return onGeneration;
+    }
+
+    public GameObject GetTowerPrefab() {
+        return towerPrefab;
+    }
+
+    public TowerInfo GetTowerInfo() {
+        return towerInfo;
     }
 
     #endregion

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// 적을 공격하는 타워 클래스
@@ -9,22 +10,25 @@ public class Tower : MonoBehaviour {
 
     private GameManager gm;
 
-    public int towerLevel;
-    public string towerName;
-    public string essence;      // color
+    private int towerLevel;
+    private string towerName;
+    // private string essence;      // color
+
     public GameObject missile;
 
-    public int size;        // size of the tower (1 = 1x1, 2 = 2x2, ... )
-    public int price;       // price of the tower ( when buying )
+    private int size;        // size of the tower (1 = 1x1, 2 = 2x2, ... )
+    private int price;       // price of the tower ( when buying )
 
-    public int originalDamage;
-    public int originalRange;
-    public float originalShotSpeed;
+    private int originalDamage;
+    private int originalRange;
+    private float originalShotSpeed;
 
     private int currentDamage;
     private int currentRange;
     private float currentShotSpeed;
     private float shotInterval;
+
+    private bool onActive; // is false, do not shot
 
     // private towerEffect effect;
 
@@ -34,12 +38,24 @@ public class Tower : MonoBehaviour {
 
     void Start () {
         gm = GameManager.gm;
-        initialize();
 	}
 
-    # region Getter/Setter
+    public void init(TowerInfo info) {
 
-    public void initialize() {
+        gm = GameManager.gm;
+
+        towerLevel = info.level;
+        towerName = info.name;
+
+        originalDamage = info.damage;
+        originalRange = info.range;
+        originalShotSpeed = info.shotSpeed;
+        size = info.size;
+        price = info.price;
+        
+        GetComponent<Image>().sprite = info.towerSprite;
+        missile.GetComponent<Image>().sprite = info.missileSprite;
+
         currentDamage = originalDamage;
         currentRange = originalRange;
         currentShotSpeed = originalShotSpeed;
@@ -47,7 +63,11 @@ public class Tower : MonoBehaviour {
         shotInterval = 1 / currentShotSpeed;
         currentTime = Time.time;
         UpdateEnemies();
+        onActive = true;
+
     }
+
+    # region Getter/Setter
 
     public int GetDamage() {
         return currentDamage;
@@ -78,6 +98,14 @@ public class Tower : MonoBehaviour {
         shotInterval = 1 / currentShotSpeed;
     }
 
+    public void SetActivity(bool b) {
+        onActive = b;
+    }
+
+    public int GetPrice() {
+        return price;
+    }
+
     # endregion
 
     public void UpdateEnemies() {
@@ -87,6 +115,8 @@ public class Tower : MonoBehaviour {
     void Update () {
 
         UpdateEnemies();
+
+        if (!onActive) return;
 
         // not ready to shot
         if (Time.time - currentTime < shotInterval) {
