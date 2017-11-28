@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 일반 자료구조
+/// </summary>
 public class Pair<T, U> {
     public Pair() {
     }

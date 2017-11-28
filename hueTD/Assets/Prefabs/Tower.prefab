@@ -68,6 +68,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e8fe912879315d43838bf2d8bf545d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  missile: {fileID: 1110392990487208, guid: a31b15b46d97ed540ba72e3d6f420aee, type: 2}
 --- !u!212 &212775104594223524
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -127,7 +128,7 @@ RectTransform:
   m_LocalScale: {x: 5, y: 5, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}

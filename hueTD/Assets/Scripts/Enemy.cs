@@ -103,9 +103,11 @@ public class Enemy : MonoBehaviour {
     }
     
     // enemy is hit
-    public void hit(int dmg) {
-        int realDmg = Mathf.Max(1, dmg - GetDefense());
+    public void hit(Tower t) {
+        int realDmg = Mathf.Max(1, t.GetDamage() - GetDefense());
         UpdateHP(-realDmg);
+
+        gm.ProcessEffect(t.GetEffect(), this);
     }
 
     #region Getter/Setter

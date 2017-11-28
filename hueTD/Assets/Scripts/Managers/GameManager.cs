@@ -12,11 +12,13 @@ public class GameManager : MonoBehaviour {
      * Managers
      */
     private BoardManager boardManager;
+    private EffectManager effectManager;
 
     /*
      * Stage related variables
      */
-    private int map;
+    public GameObject[] maps;
+    private int currentMap;
     private int wave;
     private float waveTime;
 
@@ -47,7 +49,7 @@ public class GameManager : MonoBehaviour {
     public GameObject towerPrefab;
     public TowerInfo towerInfo;
 
-	void Awake () {
+    void Awake () {
 
         /*
          * GameManager initialize
@@ -62,8 +64,10 @@ public class GameManager : MonoBehaviour {
         /*
          * Initialize Managers
          */
-        boardManager = GetComponent<BoardManager>();
-        boardManager.init();
+        boardManager = new BoardManager();
+        boardManager.init(maps);
+        effectManager = new EffectManager();
+        effectManager.init();
 
         /*
          * Initialize Databases
@@ -99,7 +103,7 @@ public class GameManager : MonoBehaviour {
          */
 
         // get enemy list of this map/wave
-        List<EnemySpawn> l = EnemySpawnDatabase.GetEnemySpawnList(map, wave);
+        List<EnemySpawn> l = EnemySpawnDatabase.GetEnemySpawnList(currentMap, wave);
 
         // clear previous list
         for(int i = 0; i < enemyGenerationList.Length; i++)
@@ -159,6 +163,8 @@ public class GameManager : MonoBehaviour {
             }
             enemyGenerationListIndex++;
         }
+
+        effectManager.RunContinuousEffects();
     }
 
     // generate new enemy, add it to the enemies list
@@ -185,6 +191,10 @@ public class GameManager : MonoBehaviour {
         onGeneration = false;
     }
 
+    public void ProcessEffect<T>(Effect effect, T target) {
+        effectManager.process(effect, target);
+    }
+
     #region Getter/Setter/Updater
 
     public BoardManager GetBoardManager() {
@@ -192,11 +202,11 @@ public class GameManager : MonoBehaviour {
     }
 
     public int GetMap() {
-        return map;
+        return currentMap;
     }
 
     public void SetMap(int mapNumber) {
-        map = mapNumber;
+        currentMap = mapNumber;
     }
 
     public int GetStageLevel() {

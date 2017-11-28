@@ -30,7 +30,7 @@ public class Tower : MonoBehaviour {
 
     private bool onActive; // is false, do not shot
 
-    // private towerEffect effect;
+    private Effect effect;
 
     private List<GameObject> enemies;
 
@@ -52,7 +52,9 @@ public class Tower : MonoBehaviour {
         originalShotSpeed = info.shotSpeed;
         size = info.size;
         price = info.price;
-        
+
+        effect = new Effect(info.effect, info.effectParams);
+
         GetComponent<Image>().sprite = info.towerSprite;
         missile.GetComponent<Image>().sprite = info.missileSprite;
 
@@ -106,6 +108,10 @@ public class Tower : MonoBehaviour {
         return price;
     }
 
+    public Effect GetEffect() {
+        return effect;
+    }
+
     # endregion
 
     public void UpdateEnemies() {
@@ -148,3 +154,16 @@ public class Tower : MonoBehaviour {
         currentTime = Time.time;
 	}
 }
+
+/*
+public class TowerEffect {
+
+    public string name;
+    public List<float> parameters;
+
+    public TowerEffect(string name, List<float> parameters) {
+        this.name = name;
+        this.parameters = parameters;
+    }
+}
+*/

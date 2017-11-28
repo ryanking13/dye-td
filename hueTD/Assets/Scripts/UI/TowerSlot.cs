@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// 타워를 놓을 수 있는 슬롯에 해당하는 클래스
+/// </summary>
 public class TowerSlot : MonoBehaviour {
 
     private GameManager gm;

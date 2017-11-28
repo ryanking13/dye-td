@@ -6,13 +6,14 @@ public class BoardManager : MonoBehaviour {
 
     private GameManager gm;
 
-    public GameObject[] maps;
+    private GameObject[] maps;
 
     private GameObject currentMap;
     private List<Lane> lanes;
 
-	public void init() {
+	public void init(GameObject[] maps) {
         gm = GameManager.gm;
+        this.maps = maps;
         currentMap = null;
         lanes = null;
 	}

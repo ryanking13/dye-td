@@ -52,6 +52,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfdc05e025e555548a9c09205e9275b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maps:
+  - {fileID: 1592835248105508, guid: 1d41a164754fca144ac0d419bf2282f1, type: 2}
   enemyPrefab: {fileID: 1772485581479486, guid: 6b0517b4ec5d5a8408f4800e48a38ce8,
     type: 2}
   towerPrefab: {fileID: 1387667790387234, guid: 91539f11d7f06ee448001c22bf591ede,
@@ -67,5 +69,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f24ee9e99e2d9e4ca6cd992cd23e377, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maps:
-  - {fileID: 1592835248105508, guid: 1d41a164754fca144ac0d419bf2282f1, type: 2}

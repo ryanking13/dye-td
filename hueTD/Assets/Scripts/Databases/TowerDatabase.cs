@@ -28,6 +28,8 @@ public static class TowerDatabase {
                     int.Parse(e.SelectSingleNode("damage").InnerText),
                     int.Parse(e.SelectSingleNode("range").InnerText),
                     float.Parse(e.SelectSingleNode("shotspeed").InnerText),
+                    e.SelectSingleNode("effect").InnerText,
+                    e.SelectSingleNode("effectparam").InnerText,
                     e.SelectSingleNode("towersprite").InnerText,
                     e.SelectSingleNode("missilesprite").InnerText
                 ));
@@ -69,11 +71,16 @@ public class TowerInfo {
     public int damage;
     public int range;
     public float shotSpeed;
+    public string effect;
+    public List<float> effectParams;
+
     public Sprite towerSprite;
     public Sprite missileSprite;
 
     public TowerInfo(int id, string name, int size, int price, int damage,
-                    int range, float shotSpeed, string towerSprite, string missileSprite) {
+                    int range, float shotSpeed, string effect, string effectParams,
+                    string towerSprite, string missileSprite) {
+
         this.id = id;
         this.name = name;
         this.size = size;
@@ -81,6 +88,14 @@ public class TowerInfo {
         this.damage = damage;
         this.range = range;
         this.shotSpeed = shotSpeed;
+        this.effect = effect;
+
+        string[] p = effectParams.Split(',');
+        this.effectParams = new List<float>();
+
+        for(int i = 0; i < p.Length; i++) {
+            this.effectParams.Add(float.Parse(p[i]));
+        }
 
         // set sprite
         this.towerSprite = Resources.Load<Sprite>("Image/Tower/" + towerSprite);

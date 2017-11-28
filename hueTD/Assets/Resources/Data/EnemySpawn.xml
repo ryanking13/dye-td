@@ -19,7 +19,7 @@
             <id>1</id>
             <lane>1</lane>
             <type>interval</type>
-            <number>5</number>
+            <number>10</number>
             <time>0,100</time>
         </enemy>
       

@@ -8,9 +8,11 @@
         <level>1</level>
         <size>1</size>
         <price>1</price>
-        <damage>5</damage>
+        <damage>1</damage>
         <range>5</range>
-        <shotspeed>5</shotspeed>
+        <shotspeed>1</shotspeed>
+        <effect>TowerPoison</effect>
+        <effectparam>2,5,1</effectparam>
         <towersprite>sample</towersprite>
         <missilesprite>sample</missilesprite>
     </tower>    
