@@ -30,6 +30,7 @@ public static class TowerDatabase {
                     float.Parse(e.SelectSingleNode("shotspeed").InnerText),
                     e.SelectSingleNode("effect").InnerText,
                     e.SelectSingleNode("effectparam").InnerText,
+                    e.SelectSingleNode("effecttype").InnerText,
                     e.SelectSingleNode("towersprite").InnerText,
                     e.SelectSingleNode("missilesprite").InnerText
                 ));
@@ -73,12 +74,13 @@ public class TowerInfo {
     public float shotSpeed;
     public string effect;
     public List<float> effectParams;
+    public string effectType;
 
     public Sprite towerSprite;
     public Sprite missileSprite;
 
     public TowerInfo(int id, string name, int size, int price, int damage,
-                    int range, float shotSpeed, string effect, string effectParams,
+                    int range, float shotSpeed, string effect, string effectParams, string effectType,
                     string towerSprite, string missileSprite) {
 
         this.id = id;
@@ -89,6 +91,7 @@ public class TowerInfo {
         this.range = range;
         this.shotSpeed = shotSpeed;
         this.effect = effect;
+        this.effectType = effectType;
 
         string[] p = effectParams.Split(',');
         this.effectParams = new List<float>();

@@ -39,13 +39,21 @@ public class TowerSlot : MonoBehaviour {
     public void OnClick() {
         // is on generating tower and no tower is on this slot
         if (gm.IsGeneratingTower() && tower == null) {
-            Destroy(towerImage);
-            tower = Instantiate(gm.GetTowerPrefab(), transform.position, Quaternion.identity) as GameObject;
-            tower.transform.SetParent(transform);
-            tower.GetComponent<Tower>().init(gm.GetTowerInfo());
-            tower.GetComponent<Tower>().SetActivity(true);
-            gm.FinishGeneration();
+            GenerateTower();
         }
+        else if(tower != null) {
+            Destroy(tower);
+        }
+        
+    }
 
+    // maybe move this to GameManager??
+    public void GenerateTower() {
+        Destroy(towerImage);
+        tower = Instantiate(gm.GetTowerPrefab(), transform.position, Quaternion.identity) as GameObject;
+        tower.transform.SetParent(transform);
+        tower.GetComponent<Tower>().init(gm.GetTowerInfo());
+        tower.GetComponent<Tower>().SetActivity(true);
+        gm.FinishTowerGeneration(tower);
     }
 }

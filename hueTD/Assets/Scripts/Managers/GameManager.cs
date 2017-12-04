@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour {
     public static GameManager gm = null;
     private SCENES scene;
     private GAMESTATE state; // game is running, paused, else;
+    private float gameTime;
 
     /*
      * Managers
@@ -49,6 +50,8 @@ public class GameManager : MonoBehaviour {
     public GameObject towerPrefab;
     public TowerInfo towerInfo;
 
+    private List<GameObject> towers;
+
     void Awake () {
 
         /*
@@ -85,9 +88,11 @@ public class GameManager : MonoBehaviour {
             enemyGenerationList[i] = new List<Pair<EnemyInfo, int>>();
 
         enemies = new List<GameObject>();
+        towers = new List<GameObject>();
 
         scene = SCENES.MAP;
         state = GAMESTATE.PAUSED;
+        gameTime = 0.0f;
 
         SetMap(0);
         SetCurrentWave(1);
@@ -134,6 +139,7 @@ public class GameManager : MonoBehaviour {
                 // game paused
                 break;
             case GAMESTATE.ONWAVE:
+                UpdateTime();
                 RunWave();
                 break;
             case GAMESTATE.INTERWAVE:
@@ -186,13 +192,32 @@ public class GameManager : MonoBehaviour {
         onGeneration = true;
     }
 
-    public void FinishGeneration() {
-        UpdateMoney(GetTowerPrefab().GetComponent<Tower>().GetPrice());
+    public void AddTower(GameObject t) {
+        towers.Add(t);
+    }
+
+    public void RemoveTower(GameObject t) {
+        towers.Remove(t);
+    }
+
+    public void FinishTowerGeneration(GameObject t) {
+        AddTower(t);
+
+        Tower tower = t.GetComponent<Tower>();
+        UpdateMoney(tower.GetPrice());
+
+        if(tower.GetEffect().type == "TG") // if effect activates on generation
+            ProcessEffect(tower.GetEffect(), tower);
+
         onGeneration = false;
     }
 
     public void ProcessEffect<T>(Effect effect, T target) {
         effectManager.process(effect, target);
+    }
+
+    public void CleanUpEffects(GameObject o) {
+        effectManager.cleanUp(o);
     }
 
     #region Getter/Setter/Updater
@@ -215,6 +240,10 @@ public class GameManager : MonoBehaviour {
 
     public void SetCurrentWave(int newWave) {
         wave = newWave;
+    }
+
+    public List<GameObject> GetTowers() {
+        return towers;
     }
 
     public List<GameObject> GetEnemies() {
@@ -255,6 +284,19 @@ public class GameManager : MonoBehaviour {
     }
 
     #endregion
+
+    #region system related functions
+
+    public float GetTime() {
+        return gameTime;
+    }
+
+    public void UpdateTime() {
+        gameTime += Time.deltaTime;
+    }
+
+    #endregion
+
 }
 
 // some config ( const ) values that are game related 

@@ -10,6 +10,7 @@ public class Tower : MonoBehaviour {
 
     private GameManager gm;
 
+    private int towerId;
     private int towerLevel;
     private string towerName;
     // private string essence;      // color
@@ -44,6 +45,7 @@ public class Tower : MonoBehaviour {
 
         gm = GameManager.gm;
 
+        towerId = info.id;
         towerLevel = info.level;
         towerName = info.name;
 
@@ -53,7 +55,7 @@ public class Tower : MonoBehaviour {
         size = info.size;
         price = info.price;
 
-        effect = new Effect(info.effect, info.effectParams);
+        effect = new Effect(info.effect, info.effectType, info.effectParams);
 
         GetComponent<Image>().sprite = info.towerSprite;
         missile.GetComponent<Image>().sprite = info.missileSprite;
@@ -63,13 +65,40 @@ public class Tower : MonoBehaviour {
         currentShotSpeed = originalShotSpeed;
 
         shotInterval = 1 / currentShotSpeed;
-        currentTime = Time.time;
+        currentTime = gm.GetTime();
         UpdateEnemies();
         onActive = true;
 
     }
 
+    // destructor
+    void OnDestroy(){
+
+        Effect e = GetEffect();
+
+        if (e == null) return;
+
+        // if effect is activated on generation, remove effect
+        if(e.type == "TG") {
+            gm.CleanUpEffects(gameObject);
+        }
+
+        gm.RemoveTower(gameObject);
+    }
+
     # region Getter/Setter
+
+    public int GetId() {
+        return towerId;
+    }
+
+    public string GetName() {
+        return towerName;
+    }
+
+    public int GetLevel() {
+        return towerLevel;
+    }
 
     public int GetDamage() {
         return currentDamage;
@@ -125,7 +154,7 @@ public class Tower : MonoBehaviour {
         if (!onActive) return;
 
         // not ready to shot
-        if (Time.time - currentTime < shotInterval) {
+        if (gm.GetTime() - currentTime < shotInterval) {
             return;
         }
 
@@ -151,7 +180,7 @@ public class Tower : MonoBehaviour {
         GameObject m = Instantiate(missile, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
         m.transform.SetParent(transform, false);
         m.GetComponent<Missile>().SetEntity(this, closestEnemy);
-        currentTime = Time.time;
+        currentTime = gm.GetTime();
 	}
 }
 

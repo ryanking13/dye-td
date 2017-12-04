@@ -7,7 +7,7 @@ using UnityEngine;
 /// 지속 효과 관련 클래스들
 /// </summary>
 
-// continous effects parents class
+// continous effects parent class
 public abstract class ContinuousEffect {
 
     public float period;
@@ -20,10 +20,15 @@ public abstract class ContinuousEffect {
 
 public class TowerPoisonEffect: ContinuousEffect {
 
+    private GameManager gm;
+
     public Enemy target;
     public int damage;
 
     public TowerPoisonEffect(Enemy target, int damage, float period, float interval, float startTime) {
+
+        gm = GameManager.gm;
+
         this.target = target;
         this.damage = damage;
         this.period = period;
@@ -40,7 +45,7 @@ public class TowerPoisonEffect: ContinuousEffect {
         if (target == null)
             return false;
 
-        float currentTime = Time.time;
+        float currentTime = gm.GetTime();
 
         if (currentTime - startTime >= period) {
             target.gameObject.GetComponent<SpriteRenderer>().color = new Color(255, 255, 255); // for test, please remove if this is remained

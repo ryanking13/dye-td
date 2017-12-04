@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
+<!-- effect Type : TG - Activate on generation, TH - Activate on Hit, ... -->
 <towerlist>
     
     <tower>
@@ -13,8 +14,25 @@
         <shotspeed>1</shotspeed>
         <effect>TowerPoison</effect>
         <effectparam>2,5,1</effectparam>
+        <effecttype>TH</effecttype>
         <towersprite>sample</towersprite>
         <missilesprite>sample</missilesprite>
-    </tower>    
+    </tower>
+
+    <tower>
+        <id>2</id>
+        <name>AccelTower</name>
+        <level>1</level>
+        <size>1</size>
+        <price>1</price>
+        <damage>1</damage>
+        <range>0</range>
+        <shotspeed>1</shotspeed>
+        <effect>AccelTowers</effect>
+        <effectparam>10,100</effectparam>
+        <effecttype>TG</effecttype>
+        <towersprite>sample2</towersprite>
+        <missilesprite>sample</missilesprite>
+    </tower>
 
 </towerlist>

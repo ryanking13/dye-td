@@ -107,7 +107,8 @@ public class Enemy : MonoBehaviour {
         int realDmg = Mathf.Max(1, t.GetDamage() - GetDefense());
         UpdateHP(-realDmg);
 
-        gm.ProcessEffect(t.GetEffect(), this);
+        if(t.GetEffect().type == "TH") // if effect activates on hit
+            gm.ProcessEffect(t.GetEffect(), this);
     }
 
     #region Getter/Setter
